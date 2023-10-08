@@ -97,7 +97,7 @@ jobs:
             export PATH="$workspace/mingw64:$workspace/mingw64/bin:$workspace/msys64/usr/bin:/usr/bin" &&
             cd "${{ env.libraryName }}" && \
             g++ --version && \
-            mingw32-make
+            mingw32-make cc=gcc
             
       - shell: cmd
         run: |

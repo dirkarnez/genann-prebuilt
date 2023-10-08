@@ -41,11 +41,11 @@ jobs:
       libraryName: genann
       cmakeInstallationPath: genann-installation
     steps:
-      # - name: Install MSYS2
-      #   uses: msys2/setup-msys2@v2
-      #   with:
-      #     msystem: MINGW64
-      #     install: make autoconf automake libtool autogen perl diffutils patch git
+      - name: Install MSYS2
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          install: autoconf automake libtool autogen perl diffutils patch
           
       - uses: actions/checkout@v4
         with:
@@ -61,25 +61,25 @@ jobs:
           curl ${{ matrix.compiler.url }} -L --output compiler &&^
           7z.exe x compiler
           
-      - name: curl cmake-3.24.0-windows-x86_64.zip
-        shell: cmd
-        run: curl https://github.com/Kitware/CMake/releases/download/v3.24.0/cmake-3.24.0-windows-x86_64.zip -L --output cmake-3.24.0-windows-x86_64.zip && dir && 7z.exe x cmake-3.24.0-windows-x86_64.zip
+      # - name: curl cmake-3.24.0-windows-x86_64.zip
+      #   shell: cmd
+      #   run: curl https://github.com/Kitware/CMake/releases/download/v3.24.0/cmake-3.24.0-windows-x86_64.zip -L --output cmake-3.24.0-windows-x86_64.zip && dir && 7z.exe x cmake-3.24.0-windows-x86_64.zip
 
-      - name: curl PortableGit-2.38.1-64-bit.7z.exe
-        shell: cmd
-        run: curl https://github.com/git-for-windows/git/releases/download/v2.38.1.windows.1/PortableGit-2.38.1-64-bit.7z.exe -L --output PortableGit-2.38.1-64-bit.7z.exe && dir && 7z.exe x PortableGit-2.38.1-64-bit.7z.exe -o"PortableGit-2.38.1-64-bit"
+      # - name: curl PortableGit-2.38.1-64-bit.7z.exe
+      #   shell: cmd
+      #   run: curl https://github.com/git-for-windows/git/releases/download/v2.38.1.windows.1/PortableGit-2.38.1-64-bit.7z.exe -L --output PortableGit-2.38.1-64-bit.7z.exe && dir && 7z.exe x PortableGit-2.38.1-64-bit.7z.exe -o"PortableGit-2.38.1-64-bit"
       
-      - name: set PATH, check mingw version, cmake generate, build and install
-        shell: cmd
-        run: |
-            set PATH=^
-            ${{ github.workspace }}\mingw64;^
-            ${{ github.workspace }}\mingw64\bin;^
-            ${{ github.workspace }}\PortableGit-2.38.1-64-bit\bin;
-            set CD_LINUX=%CD:\=/%
-            cd "${{ env.libraryName }}" &&^
-            mingw32-make.exe &&^
-            dir /s
+      # - name: set PATH, check mingw version, cmake generate, build and install
+      #   shell: cmd
+      #   run: |
+      #       set PATH=^
+      #       ${{ github.workspace }}\mingw64;^
+      #       ${{ github.workspace }}\mingw64\bin;^
+      #       ${{ github.workspace }}\PortableGit-2.38.1-64-bit\bin;
+      #       set CD_LINUX=%CD:\=/%
+      #       cd "${{ env.libraryName }}" &&^
+      #       mingw32-make.exe &&^
+      #       dir /s
           
       # - shell: cmd
       #   run: |
@@ -90,14 +90,14 @@ jobs:
       #     "${{ github.workspace }}\PortableGit-2.38.1-64-bit\usr\bin\sed.exe" -i "s/#define DARKNET_API/#define DARKNET_API\n#include <time.h>/g" darknet.h &&^
       #     type .\darknet.h
           
-      # - name: set PATH, check mingw version, cmake generate, build and install
-      #   shell: msys2 {0}
-      #   run: |
-      #       workspace=$(pwd) &&
-      #       export PATH="$workspace/mingw64:$workspace/mingw64/bin:$workspace/cmake-3.24.0-windows-x86_64/bin:$workspace/PortableGit-2.38.1-64-bit/bin:$workspace/msys64/usr/bin:/usr/bin" &&
-      #       cd "${{ env.libraryName }}" && \
-      #       g++ --version && \
-      #       mingw32-make obj backup libdarknet.a libdarknet.so
+      - name: set PATH, check mingw version, cmake generate, build and install
+        shell: msys2 {0}
+        run: |
+            workspace=$(pwd) &&
+            export PATH="$workspace/mingw64:$workspace/mingw64/bin:$workspace/msys64/usr/bin:/usr/bin" &&
+            cd "${{ env.libraryName }}" && \
+            g++ --version && \
+            mingw32-make
             
       - shell: cmd
         run: |
